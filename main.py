@@ -46,6 +46,25 @@ async def on_message(message):
     if message.content.startswith(prefix):
         if (argslist[0] == "compliment"):
             await message.channel.send(compliments[random.randrange(len(compliments))])
-
+        elif (argslist[0] == "pfp"):
+            if not (message.author.id == 436985877806317586):
+                await message.channel.send(f"https://cdn.discordapp.com/avatars/{client.user.id}/{client.user.avatar}.png")
+                return
+            try:
+                if (argslist[2] == "reset"):
+                    await message.channel.send("reseting pfp...")
+                    await client.user.edit(avatar=open('images/resetpfp.png', 'rb').read())
+                    await message.channel.send("pfp has been reset back to normal")
+            except IndexError:
+                try:
+                    try:
+                        open('images/newpfp.png', 'wb').write(requests.get(message.attachments[0].url, allow_redirects=True).content)
+                        await message.channel.send("changing pfp...")
+                        await client.user.edit(avatar=open('images/newpfp.png', 'rb').read())
+                        await message.channel.send("pfp has been changed")
+                    except discord.errors.HTTPException:
+                        await message.channel.send("You are changing your avatar too fast. Try again later.")
+                except IndexError:
+                    await message.channel.send(f"https://cdn.discordapp.com/avatars/{client.user.id}/{client.user.avatar}.png")
 
 client.run(token)

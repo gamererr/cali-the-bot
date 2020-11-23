@@ -97,5 +97,17 @@ async def on_message(message):
                 await message.channel.send(f"status set to {' '.join(argslist[1:])}")
             except IndexError:
                 await message.channel.send("you need to give a status")
+        elif (argslist[0] == "name"):
+            if not (message.author.id == 436985877806317586):
+                return
+            newname = " ".join(argslist[2:])
+            if len(newname) > 32:
+                return
+            await message.channel.send("changing name...")
+            try:
+                await client.user.edit(username=newname)
+                await message.channel.send("named changed!")
+            except discord.errors.HTTPException:
+                await message.channel.send("You are changing your username or Discord Tag too fast. Try again later.")
 
 client.run(token)

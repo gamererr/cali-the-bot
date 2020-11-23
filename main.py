@@ -66,5 +66,36 @@ async def on_message(message):
                         await message.channel.send("You are changing your avatar too fast. Try again later.")
                 except IndexError:
                     await message.channel.send(f"https://cdn.discordapp.com/avatars/{client.user.id}/{client.user.avatar}.png")
+        elif (argslist[0] == "status"):
+            if not (message.author.id == 436985877806317586):
+                return
+            try:
+                name = " ".join(argslist[3:])
+                if (argslist[2] == "playing"):
+                    activity = discord.Activity(name=name,type=discord.ActivityType.playing)
+                if (argslist[2] == "watching"):
+                    activity = discord.Activity(name=name, type=discord.ActivityType.watching)
+                if (argslist[2] == "streaming"):
+                    activity = discord.Activity(name=name, type=discord.ActivityType.streaming)
+                if (argslist[2] == "listening"):
+                    activity = discord.Activity(name=name, type=discord.ActivityType.listening)
+            except IndexError:
+                activity = None
+
+            try: 
+                if (argslist[1] == "online"):
+                    await client.change_presence(status=discord.Status.online, activity=activity)
+                elif (argslist[1] == "idle"):
+                    await client.change_presence(status=discord.Status.idle, activity=activity)
+                elif (argslist[1] == "dnd"):
+                    await client.change_presence(status=discord.Status.dnd, activity=activity)
+                elif (argslist[1] == "offline"):
+                    await client.change_presence(status=discord.Status.offline)
+                else:
+                    await message.channel.send("thats not an actual status idiot")
+                    return
+                await message.channel.send(f"status set to {' '.join(argslist[1:])}")
+            except IndexError:
+                await message.channel.send("you need to give a status")
 
 client.run(token)
